@@ -1,0 +1,18 @@
+# Build outputs. data/raw holds a 16 MB SPSS file; everything here is
+# reproducible with `python -m informality build`.
+data/
+!docs/
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

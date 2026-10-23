@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Labour informality in Paraguay</title>
+<style>
+ :root{--bg:#fff;--fg:#16191d;--muted:#5c6672;--line:#e3e7ec;--zebra:#f7f9fb;
+  --pass:#17795e;--pass-bg:#e6f4ef;--warn:#8a5a00;--warn-bg:#fdf3e0;
+  --fail:#b02a1f;--fail-bg:#fdecea;--accent:#1f4e79;--bar:#4a86c5;--bar2:#c5563f}
+ @media(prefers-color-scheme:dark){:root{--bg:#14171a;--fg:#e8ecf1;--muted:#9aa5b1;
+  --line:#2a2f36;--zebra:#191d21;--pass:#4cc79f;--pass-bg:#16302a;--warn:#e0a33c;
+  --warn-bg:#33280f;--fail:#f1786c;--fail-bg:#3a1d1a;--accent:#7fb2e5;--bar:#5d9bd8;
+  --bar2:#d4705a}}
+ *{box-sizing:border-box}
+ body{margin:0;padding:2rem 1.25rem 4rem;background:var(--bg);color:var(--fg);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1060px;margin:0 auto}
+ h1{font-size:1.6rem;margin:0 0 .25rem;letter-spacing:-.01em}
+ h2{font-size:1.05rem;margin:2.4rem 0 .7rem}
+ .sub{color:var(--muted);margin:0 0 1.8rem;font-size:.9rem}
+ .cards{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+ .card{border:1px solid var(--line);border-radius:8px;padding:.9rem 1rem}
+ .card .n{font-size:1.5rem;font-weight:650;line-height:1.1}
+ .card .l{color:var(--muted);font-size:.75rem;text-transform:uppercase;
+  letter-spacing:.04em;margin-top:.2rem}
+ .card.ok .n{color:var(--pass)} .card.bad .n{color:var(--fail)}
+ .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+ table{border-collapse:collapse;width:100%;font-size:.86rem}
+ th,td{text-align:right;padding:.5rem .7rem;border-bottom:1px solid var(--line);white-space:nowrap}
+ th:first-child,td:first-child{text-align:left;white-space:normal}
+ th{font-weight:600;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+ tbody tr:nth-child(even){background:var(--zebra)}
+ tbody tr:last-child td{border-bottom:none}
+ code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+ .pill{display:inline-block;padding:.08rem .45rem;border-radius:4px;font-size:.72rem;font-weight:650}
+ .pill.pass{color:var(--pass);background:var(--pass-bg)}
+ .pill.error{color:var(--fail);background:var(--fail-bg)}
+ .pill.warning{color:var(--warn);background:var(--warn-bg)}
+ .pill.info{color:var(--muted);background:var(--line)}
+ .note{border-left:3px solid var(--accent);padding:.55rem 0 .55rem .9rem;color:var(--muted);
+  margin:1rem 0;font-size:.89rem}
+ .bar{height:11px;background:var(--bar);border-radius:2px;display:inline-block;vertical-align:middle}
+ .bar.alt{background:var(--bar2)}
+ footer{margin-top:3rem;color:var(--muted);font-size:.79rem;border-top:1px solid var(--line);padding-top:1rem}
+</style></head><body><div class="wrap">
+ <h1>Labour informality in Paraguay</h1>
+ <p class="sub">Private-sector employees aged 15 and over &middot; EPHC 2024 microdata, Instituto Nacional
+  de Estad&iacute;stica &middot; generated 2026-10-23 19:41 UTC</p>
+
+ <div class="cards">
+  <div class="card"><div class="n">59.8%</div><div class="l">Informality rate</div></div>
+  <div class="card"><div class="n">63.8%</div><div class="l">If weights ignored</div></div>
+  <div class="card"><div class="n">1.67&times;</div><div class="l">Interval widening</div></div>
+  <div class="card"><div class="n">3,808</div><div class="l">Effective sample</div></div>
+  <div class="card"><div class="n">0.860</div><div class="l">Model AUC</div></div>
+  <div class="card ok">
+   <div class="n">12/13</div><div class="l">Checks passed</div></div>
+ </div>
+
+ <div class="note">
+  The survey is a clustered probability sample. Every rate here is weighted by
+  the expansion factor, and every interval comes from resampling whole primary
+  sampling units rather than rows &mdash; which is why they are wider than a
+  textbook binomial interval would be.
+ </div>
+
+ <h2>The headline estimate</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Measure</th><th>Value</th><th>Meaning</th></tr></thead><tbody>
+  <tr><td>Weighted rate</td><td><strong>59.8%</strong></td>
+   <td style="text-align:left">1,300,886 workers</td></tr>
+  <tr><td>Unweighted rate</td><td>63.8%</td>
+   <td style="text-align:left">what an analysis ignoring the design would report</td></tr>
+  <tr><td>Naive 95% interval</td><td>62.9%–64.7%</td>
+   <td style="text-align:left">binomial, assumes independent observations</td></tr>
+  <tr><td>Design-based 95% interval</td><td><strong>58.3%–61.4%</strong></td>
+   <td style="text-align:left">cluster bootstrap, 400 replicates</td></tr>
+  <tr><td>Respondents / clusters</td><td>10,604 / 1,693</td>
+   <td style="text-align:left">effective sample size 3,808</td></tr>
+  </tbody></table></div>
+
+ <h2>How the sample narrows</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Step</th><th>Remaining</th></tr></thead><tbody>
+  <tr><td>person records in the file</td><td>57,744</td></tr><tr><td>answered B10 (asked of employed workers only)</td><td>29,074</td></tr><tr><td>aged 15 or over</td><td>28,796</td></tr><tr><td>Private-sector employees aged 15 and over</td><td>10,604</td></tr><tr><td>with a positive expansion factor</td><td>10,604</td></tr>
+  </tbody></table></div>
+
+ 
+ <h2>Firm size band</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Category</th><th>n</th><th>Informality</th><th>95% interval</th><th></th></tr></thead><tbody>
+  
+  <tr><td>2 a 5 personas</td><td>3,889</td>
+   
+   <td>91.9%</td>
+   <td>90.7&ndash;93.0%</td>
+   <td style="width:30%"><span class="bar" style="width:91.88390806204367%"></span></td>
+   </tr>
+  
+  <tr><td>6 a 10 personas</td><td>1,765</td>
+   
+   <td>69.1%</td>
+   <td>66.7&ndash;71.6%</td>
+   <td style="width:30%"><span class="bar" style="width:69.14896759519097%"></span></td>
+   </tr>
+  
+  <tr><td>11 a 20 personas</td><td>1,077</td>
+   
+   <td>54.1%</td>
+   <td>50.3&ndash;57.8%</td>
+   <td style="width:30%"><span class="bar" style="width:54.07471789281401%"></span></td>
+   </tr>
+  
+  <tr><td>21 a 30 personas</td><td>641</td>
+   
+   <td>41.0%</td>
+   <td>35.2&ndash;45.5%</td>
+   <td style="width:30%"><span class="bar" style="width:40.9687112467805%"></span></td>
+   </tr>
+  
+  <tr><td>No sabe</td><td>1,034</td>
+   
+   <td>40.1%</td>
+   <td>35.9&ndash;44.0%</td>
+   <td style="width:30%"><span class="bar" style="width:40.05348650136186%"></span></td>
+   </tr>
+  
+  <tr><td>31 a 50 personas</td><td>606</td>
+   
+   <td>36.8%</td>
+   <td>32.5&ndash;40.7%</td>
+   <td style="width:30%"><span class="bar" style="width:36.77521449941894%"></span></td>
+   </tr>
+  
+  <tr><td>51 a 100 personas</td><td>718</td>
+   
+   <td>27.5%</td>
+   <td>23.7&ndash;30.9%</td>
+   <td style="width:30%"><span class="bar" style="width:27.498954615736192%"></span></td>
+   </tr>
+  
+  <tr><td>101 a 500 personas</td><td>653</td>
+   
+   <td>17.5%</td>
+   <td>13.4&ndash;21.3%</td>
+   <td style="width:30%"><span class="bar" style="width:17.467890713259408%"></span></td>
+   </tr>
+  
+  <tr><td>Más de 500 personas</td><td>221</td>
+   
+   <td>12.5%</td>
+   <td>7.5&ndash;18.4%</td>
+   <td style="width:30%"><span class="bar" style="width:12.532523850823937%"></span></td>
+   </tr>
+  
+  </tbody></table></div>
+ 
+ <h2>Industry</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Category</th><th>n</th><th>Informality</th><th>95% interval</th><th></th></tr></thead><tbody>
+  
+  <tr><td>Construcción</td><td>1,408</td>
+   
+   <td>87.6%</td>
+   <td>84.9&ndash;90.9%</td>
+   <td style="width:30%"><span class="bar" style="width:87.62803451891281%"></span></td>
+   </tr>
+  
+  <tr><td>Agricultura, Ganadería, Caza y Pesca</td><td>1,254</td>
+   
+   <td>74.9%</td>
+   <td>70.7&ndash;78.2%</td>
+   <td style="width:30%"><span class="bar" style="width:74.91522668153104%"></span></td>
+   </tr>
+  
+  <tr><td>Servicios Comunales, Sociales y Personales</td><td>1,017</td>
+   
+   <td>65.2%</td>
+   <td>61.9&ndash;68.7%</td>
+   <td style="width:30%"><span class="bar" style="width:65.24550289800412%"></span></td>
+   </tr>
+  
+  <tr><td>Comercio, Restaurantes y Hoteles</td><td>3,555</td>
+   
+   <td>57.4%</td>
+   <td>55.2&ndash;59.5%</td>
+   <td style="width:30%"><span class="bar" style="width:57.40543730133434%"></span></td>
+   </tr>
+  
+  <tr><td>Transporte, Almacenamiento y Comunicaciones</td><td>515</td>
+   
+   <td>48.4%</td>
+   <td>42.6&ndash;54.6%</td>
+   <td style="width:30%"><span class="bar" style="width:48.382030010979626%"></span></td>
+   </tr>
+  
+  <tr><td>Industrias Manufactureras</td><td>1,720</td>
+   
+   <td>48.3%</td>
+   <td>45.3&ndash;51.6%</td>
+   <td style="width:30%"><span class="bar" style="width:48.33495134671393%"></span></td>
+   </tr>
+  
+  <tr><td>Finanzas, Seguros, Inmuebles</td><td>1,093</td>
+   
+   <td>43.5%</td>
+   <td>40.2&ndash;46.3%</td>
+   <td style="width:30%"><span class="bar" style="width:43.54759313954091%"></span></td>
+   </tr>
+  
+  <tr><td>Electricidad, Gas y Agua</td><td>41</td>
+   <td colspan="3" style="text-align:left;color:var(--muted)">
+     too few respondents to estimate</td>
+   </tr>
+  
+  <tr><td>NR</td><td>1</td>
+   <td colspan="3" style="text-align:left;color:var(--muted)">
+     too few respondents to estimate</td>
+   </tr>
+  
+  </tbody></table></div>
+ 
+ <h2>Urban or rural</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Category</th><th>n</th><th>Informality</th><th>95% interval</th><th></th></tr></thead><tbody>
+  
+  <tr><td>Rural</td><td>3,373</td>
+   
+   <td>73.2%</td>
+   <td>70.8&ndash;76.2%</td>
+   <td style="width:30%"><span class="bar" style="width:73.23150598062583%"></span></td>
+   </tr>
+  
+  <tr><td>Urbana</td><td>7,231</td>
+   
+   <td>56.2%</td>
+   <td>54.6&ndash;57.7%</td>
+   <td style="width:30%"><span class="bar" style="width:56.157428153921096%"></span></td>
+   </tr>
+  
+  </tbody></table></div>
+ 
+ <h2>Sex</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Category</th><th>n</th><th>Informality</th><th>95% interval</th><th></th></tr></thead><tbody>
+  
+  <tr><td>Hombres</td><td>7,452</td>
+   
+   <td>63.6%</td>
+   <td>61.9&ndash;65.3%</td>
+   <td style="width:30%"><span class="bar" style="width:63.56309537380649%"></span></td>
+   </tr>
+  
+  <tr><td>Mujeres</td><td>3,152</td>
+   
+   <td>51.1%</td>
+   <td>48.7&ndash;53.4%</td>
+   <td style="width:30%"><span class="bar" style="width:51.108197414415756%"></span></td>
+   </tr>
+  
+  </tbody></table></div>
+ 
+ <h2>Language spoken at home</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Category</th><th>n</th><th>Informality</th><th>95% interval</th><th></th></tr></thead><tbody>
+  
+  <tr><td>Otro idioma</td><td>332</td>
+   
+   <td>79.8%</td>
+   <td>74.6&ndash;86.2%</td>
+   <td style="width:30%"><span class="bar" style="width:79.75695886996262%"></span></td>
+   </tr>
+  
+  <tr><td>Guaraní</td><td>2,866</td>
+   
+   <td>78.3%</td>
+   <td>76.0&ndash;80.5%</td>
+   <td style="width:30%"><span class="bar" style="width:78.30958877137714%"></span></td>
+   </tr>
+  
+  <tr><td>Guaraní y Castellano</td><td>4,446</td>
+   
+   <td>58.3%</td>
+   <td>56.3&ndash;60.6%</td>
+   <td style="width:30%"><span class="bar" style="width:58.341779674378394%"></span></td>
+   </tr>
+  
+  <tr><td>Castellano</td><td>2,952</td>
+   
+   <td>47.5%</td>
+   <td>45.4&ndash;49.7%</td>
+   <td style="width:30%"><span class="bar" style="width:47.470017328481035%"></span></td>
+   </tr>
+  
+  <tr><td>No habla</td><td>8</td>
+   <td colspan="3" style="text-align:left;color:var(--muted)">
+     too few respondents to estimate</td>
+   </tr>
+  
+  </tbody></table></div>
+ 
+
+ <h2>Prediction</h2>
+ <p class="sub">Five-fold cross-validation, weighted. The clustered split keeps every
+  primary sampling unit entirely on one side, so the model is scored on places it
+  has never seen.</p>
+ <div class="scroll"><table>
+  <thead><tr><th>Model</th><th>AUC (clustered)</th><th>AUC (random split)</th>
+   <th>Optimism</th><th>Brier</th><th>Baseline Brier</th></tr></thead><tbody>
+  
+  <tr><td>logistic</td>
+   <td><strong>0.8492</strong></td>
+   <td>0.8499</td>
+   <td>+0.0007</td>
+   <td>0.1547</td>
+   <td>0.2405</td></tr>
+  
+  <tr><td>gradient boosting</td>
+   <td><strong>0.8598</strong></td>
+   <td>0.8616</td>
+   <td>+0.0018</td>
+   <td>0.1497</td>
+   <td>0.2405</td></tr>
+  
+  </tbody></table></div>
+
+ <h2>What the model is actually using</h2>
+ <p class="sub">Each feature removed, the model refitted, and the AUC it gave up measured.</p>
+ <div class="scroll"><table>
+  <thead><tr><th>Feature</th><th>AUC without it</th><th>Lost</th><th></th></tr></thead><tbody>
+  
+  <tr><td>Firm size band <code>B08</code></td>
+   <td>0.7552</td>
+   <td>+0.0940</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:100.0%"></span></td></tr>
+  
+  <tr><td>Industry <code>B02REC</code></td>
+   <td>0.8407</td>
+   <td>+0.0085</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:9.049809221608042%"></span></td></tr>
+  
+  <tr><td>Years of schooling <code>añoest</code></td>
+   <td>0.8423</td>
+   <td>+0.0070</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:7.410846447017293%"></span></td></tr>
+  
+  <tr><td>Age <code>P02</code></td>
+   <td>0.8466</td>
+   <td>+0.0026</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:2.80027712709169%"></span></td></tr>
+  
+  <tr><td>Department <code>DPTO</code></td>
+   <td>0.8466</td>
+   <td>+0.0026</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:2.7618240974874513%"></span></td></tr>
+  
+  <tr><td>Language spoken at home <code>ED01</code></td>
+   <td>0.8480</td>
+   <td>+0.0012</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:1.3236565177233972%"></span></td></tr>
+  
+  <tr><td>Sex <code>P06</code></td>
+   <td>0.8489</td>
+   <td>+0.0003</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:0.3578354744723431%"></span></td></tr>
+  
+  <tr><td>Hours worked per week (derived from daily entries) <code>weekly_hours</code></td>
+   <td>0.8489</td>
+   <td>+0.0003</td>
+   <td style="width:40%"><span class="bar alt"
+     style="width:0.33289417476461136%"></span></td></tr>
+  
+  <tr><td>Urban or rural <code>AREA</code></td>
+   <td>0.8495</td>
+   <td>-0.0002</td>
+   <td style="width:40%"></td></tr>
+  
+  </tbody></table></div>
+
+ <h2>Checks</h2>
+ <div class="scroll"><table>
+  <thead><tr><th>Status</th><th>Check</th><th>Expected</th><th>Observed</th></tr></thead><tbody>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>sample.weights_reproduce_population</code>
+     <div style="color:var(--muted)">the single strongest evidence that weights and filters are right</div></td>
+   <td style="text-align:left">within 5% of 6,200,000 (INE projection for 2024)</td>
+   <td style="text-align:left">6,126,659</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>sample.universe_is_not_empty</code></td>
+   <td style="text-align:left">at least 1,000 respondents in the modelling universe</td>
+   <td style="text-align:left">10,604</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>sample.target_is_binary</code>
+     <div style="color:var(--muted)">code 9 is &#39;no response&#39; and is dropped, never imputed</div></td>
+   <td style="text-align:left">every row coded [1, 6]</td>
+   <td style="text-align:left">0 rows outside those codes</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>sample.target_has_variation</code>
+     <div style="color:var(--muted)">across all employed workers it is 99%+ for several categories, which is why the universe is restricted</div></td>
+   <td style="text-align:left">the outcome is genuinely uncertain in this universe</td>
+   <td style="text-align:left">63.8% informal (unweighted)</td></tr>
+  
+  <tr><td><span class="pill info">info</span></td>
+   <td><code>design.weights_change_the_answer</code>
+     <div style="color:var(--muted)">an informational measurement: this is the error an unweighted analysis would have published</div></td>
+   <td style="text-align:left">weighted and unweighted rates agree</td>
+   <td style="text-align:left">they differ by 4.07 points (59.76% weighted, 63.82% not)</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>design.interval_accounts_for_clustering</code>
+     <div style="color:var(--muted)">a design interval narrower than the naive one would mean the bootstrap is resampling rows rather than clusters</div></td>
+   <td style="text-align:left">the design-based interval is at least as wide as the naive one</td>
+   <td style="text-align:left">design 0.0305 vs naive 0.0183 (1.67x)</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>design.enough_clusters_to_bootstrap</code></td>
+   <td style="text-align:left">at least 30 primary sampling units</td>
+   <td style="text-align:left">1,693 clusters over 10,604 respondents</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>model.logistic.beats_chance</code></td>
+   <td style="text-align:left">clustered-CV AUC above 0.60</td>
+   <td style="text-align:left">0.8492</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>model.logistic.beats_base_rate_brier</code></td>
+   <td style="text-align:left">better Brier score than predicting the base rate for everyone</td>
+   <td style="text-align:left">0.1547 vs 0.2405 baseline</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>model.logistic.cluster_leakage</code>
+     <div style="color:var(--muted)">measured rather than assumed; a large positive gap would mean the random split was scoring on clusters it had already trained on</div></td>
+   <td style="text-align:left">a random split scores no higher than a clustered one</td>
+   <td style="text-align:left">random CV is +0.0007 AUC above clustered</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>model.gradient_boosting.beats_chance</code></td>
+   <td style="text-align:left">clustered-CV AUC above 0.60</td>
+   <td style="text-align:left">0.8598</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>model.gradient_boosting.beats_base_rate_brier</code></td>
+   <td style="text-align:left">better Brier score than predicting the base rate for everyone</td>
+   <td style="text-align:left">0.1497 vs 0.2405 baseline</td></tr>
+  
+  <tr><td><span class="pill pass">pass</span>
+      </td>
+   <td><code>model.gradient_boosting.cluster_leakage</code>
+     <div style="color:var(--muted)">measured rather than assumed; a large positive gap would mean the random split was scoring on clusters it had already trained on</div></td>
+   <td style="text-align:left">a random split scores no higher than a clustered one</td>
+   <td style="text-align:left">random CV is +0.0018 AUC above clustered</td></tr>
+  
+  </tbody></table></div>
+
+ <footer>Built from INE microdata. Every figure is computed by the run that produced
+  this page. Not an official statistic of the Instituto Nacional de Estad&iacute;stica.</footer>
+</div></body></html>

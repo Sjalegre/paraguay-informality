@@ -1,0 +1,106 @@
+# Declarative survey configuration.
+#
+# The EPHC is a complex probability sample: households are drawn in clusters
+# (primary sampling units) and carry expansion factors. Nothing here treats a
+# row as an independent observation, because it is not one.
+
+source:
+  name: Encuesta Permanente de Hogares Continua (EPHC)
+  publisher: Instituto Nacional de Estadistica (INE), Paraguay
+  base_url: https://www.ine.gov.py/microdatos/register/EPHC-ANUAL
+  # The person-level record. REG01 is the dwelling and INGREFAM the household
+  # income block; neither is needed for the labour module.
+  files:
+    person: "EPHC_{year}_ANUAL/REG02_EPHC_ANUAL_{year}.SAV"
+  years: [2022, 2023, 2024]
+  primary_year: 2024
+  # The portal serves these without registration, but rejects a bare client.
+  user_agent: "Mozilla/5.0 (research; sjalegre39@gmail.com)"
+
+design:
+  weight: FACTOR          # expansion factor, revision 2025
+  cluster: UPM            # primary sampling unit
+  # The INE does not publish an explicit stratum variable with the microdata.
+  # Department crossed with urban/rural is the conventional stand-in and is
+  # what the published sampling design describes.
+  strata: [DPTO, AREA]
+
+# The target. B10 asks whether the person contributes to a pension fund, which
+# is the operational definition of labour informality used by the ILO and by
+# the INE itself. A worker who does not contribute is informal.
+target:
+  variable: B10
+  informal_value: 6
+  formal_value: 1
+  # Codes outside the two above (9 = no response) are dropped rather than
+  # imputed: inventing a labour status is not a modelling choice, it is making
+  # the answer up.
+  valid_values: [1, 6]
+
+# Who the model is about.
+#
+# Informality across all employed workers is close to deterministic: the
+# self-employed are 99.9% informal, unpaid family workers 100%, employers
+# 99.1%. A classifier given the employment category would score near-perfectly
+# by memorising those categories, which measures nothing. Restricting to
+# private-sector employees leaves a population where informality is genuinely
+# uncertain -- 59.8% -- and where the question has content.
+universe:
+  min_age: 15
+  employment_category:
+    variable: B12
+    keep: [2]            # 2 = private-sector employee
+    label: Private-sector employees aged 15 and over
+
+features:
+  categorical:
+    B08: Firm size band
+    B02REC: Industry
+    AREA: Urban or rural
+    DPTO: Department
+    P06: Sex
+    ED01: Language spoken at home
+  numeric:
+    P02: Age
+    "a\xF1oest": Years of schooling
+
+  # Built from raw columns rather than taken from one.
+  #
+  # B06 ("hours usually worked") is deliberately unused: the questionnaire only
+  # asks it of respondents whose week was atypical, so it is missing for 90% of
+  # this population, and a model given it would mostly learn the shape of the
+  # questionnaire. The seven daily entries are complete for everyone.
+  #
+  # They are recorded as H.MM, not decimal hours: 8.30 is eight and a half
+  # hours and .45 is three quarters of one. Adding them arithmetically
+  # understates the week, and nothing complains.
+  derived:
+    weekly_hours:
+      label: Hours worked per week
+      kind: numeric
+      from: [B03LU, B03MA, B03MI, B03JU, B03VI, B03SA, B03DO]
+      encoding: hours_minutes
+
+# Binary and categorical answers in this survey are coded 1/6, not 1/0 or 1/2:
+# sex is 1 = male, 6 = female; area is 1 = urban, 6 = rural. Treating them as
+# numeric silently inserts a 6 where a 1 belongs, and nothing errors.
+coding:
+  yes_no_pairs:
+    "1": affirmative
+    "6": negative
+  missing_codes: [9, 99, 999]
+
+bootstrap:
+  # Resampling whole clusters, not rows: that is what makes the interval
+  # reflect the sampling design rather than an independence assumption the
+  # data does not satisfy.
+  replicates: 400
+  seed: 20260823
+
+modelling:
+  folds: 5
+  seed: 20260823
+  test_size: 0.25
+  models:
+    - logistic
+    - gradient_boosting

@@ -1,0 +1,12 @@
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.4
+# Reads SPSS .sav files with their variable and value labels, so the codebook
+# travels with the data instead of living in a separate legacy .xls.
+pyreadstat>=1.2
+PyYAML>=6.0
+Jinja2>=3.1
+requests>=2.31
+
+# Testing
+pytest>=8.0
